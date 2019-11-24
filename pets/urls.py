@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import user_api
+from .views import *
 urlpatterns = [
-    path('user/',user_api),
+    path('register/', register_api),
+    path('login/', login_api),
+    path('<str:key>/pet/', pet_api),
+    path('<str:key>/pet/<int:pk>', pet_api2),
+    path('<str:key>/cage/', cage_api),
+    path('<str:key>/cage/<int:pk>', cage_api2),
+    path('<str:key>/', logout),
 ]
