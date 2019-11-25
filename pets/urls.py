@@ -23,5 +23,6 @@ urlpatterns = [
     path('<str:key>/pet/<int:pk>', pet_api2),
     path('<str:key>/cage/', cage_api),
     path('<str:key>/cage/<int:pk>', cage_api2),
-    path('<str:key>/', logout),
+    path('<str:key>/bye/', bye_api),
+
 ]

@@ -127,6 +127,34 @@ def logout(request,key):
     else:
         return Response({"sucsefuly": False})
 
+@api_view(['POST','GET','DELETE'])
+def bye_api(request,key):
+    k = User.objects.filter(key=key).count()
+    if k == 1:
+        if request.method == 'GET':
+            ser = bye_s(Bye.objects.all(), many=True)
+            return Response(ser.data)
+        elif request.method == 'POST':
+            try:
+                login = User.objects.get(key=key)
+                price = 0
+                pets = request.data["pets"]
+                for i in pets:
+                    p = Pets.objects.get(id=i).price
+                    price += int(p)
+                bye = Bye.objects.create(price=price, name=login.login)
+                for i in pets:
+                    bye.pets_set.add(Pets.objects.get(id=i))
+                bye.save()
+                return Response({"sucsefuly": True})
+            except:
+                return Response({"sucsefuly": False})
 
+        elif request.method == 'DELETE':
+            try:
+                Bye.objects.get(id=request.data["id"]).delete()
+                return Response({"sucsefuly": True})
+            except:
+                return Response({"sucsefuly": False})
 
 
