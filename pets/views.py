@@ -1,6 +1,6 @@
 import hashlib
 import random
-
+from django.shortcuts import Http404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
@@ -43,12 +43,15 @@ def login_api(request):
             user.delete()
             return Response({"sucsefuly": True})
         else:
-            return Response({"sucsefuly": False})
+            return Response({"sucsefuly": False}, status=404)
+    else:
+        return Response({"sucsefuly": False}, status=404)
+
 
 @api_view(['POST','GET'])
-def pet_api(request,key):
-    k = User.objects.filter(key=key).count()
-    if k == 1:
+def pet_api(request, key):
+    k = User.objects.filter(key=key)
+    if k.count() == 1:
         if request.method == 'GET':
             ser = pets_s(Pets.objects.all(), many=True)
             return Response(ser.data)
@@ -59,6 +62,8 @@ def pet_api(request,key):
                 return Response({"sucsefuly": True})
             else:
                 return Response({"sucsefuly": False})
+    else:
+        return Response({"sucsefuly": False}, status=404)
 
 @api_view(['PUT','DELETE'])
 def pet_api2(request,key,pk):
@@ -77,6 +82,8 @@ def pet_api2(request,key,pk):
                 return Response({"sucsefuly": True})
             else:
                 return Response({"sucsefuly": False})
+    else:
+        Response({"sucsefuly": False}, status=404)
 
 @api_view(['POST','GET','DELETE'])
 def cage_api(request,key):
@@ -94,6 +101,8 @@ def cage_api(request,key):
                 return Response({"sucsefuly": True})
             except:
                 return Response({"sucsefuly": False})
+    else:
+        Response({"sucsefuly": False}, status=404)
 
 @api_view(['POST','DELETE'])
 def cage_api2(request,key,pk):
@@ -114,6 +123,8 @@ def cage_api2(request,key,pk):
                 return Response({"sucsefuly": True})
             except:
                 return Response({"sucsefuly": False})
+    else:
+        Response({"sucsefuly": False}, status=404)
 
 @api_view(['DELETE'])
 def logout(request,key):
@@ -125,7 +136,7 @@ def logout(request,key):
             k.save()
             return Response({"sucsefuly": True})
     else:
-        return Response({"sucsefuly": False})
+        Response({"sucsefuly": False}, status=404)
 
 @api_view(['POST','GET','DELETE'])
 def bye_api(request,key):
@@ -156,5 +167,6 @@ def bye_api(request,key):
                 return Response({"sucsefuly": True})
             except:
                 return Response({"sucsefuly": False})
-
+    else:
+        Response({"sucsefuly": False}, status=404)
 
